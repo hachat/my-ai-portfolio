@@ -16,17 +16,39 @@ def main():
 
     genai.configure(api_key=api_key)
     
-    # Use Gemini 1.5 Pro as requested for better performance
-    model_name = 'gemini-1.5-pro'
+    # Dynamic Model Selection
+    print("Listing available models...")
+    available_models = []
     try:
-        model = genai.GenerativeModel(model_name)
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                available_models.append(m.name)
+                print(f"Found supported model: {m.name}")
     except Exception as e:
-        print(f"Error initializing {model_name}: {e}")
-        # Fallback to older pro model if the new one fails
-        model_name = 'gemini-pro'
-        model = genai.GenerativeModel(model_name)
+        print(f"Error listing models: {e}")
+
+    # Priority list of models to use
+    priority_models = [
+        'models/gemini-1.5-pro-latest',
+        'models/gemini-1.5-pro',
+        'models/gemini-1.5-pro-001',
+        'models/gemini-1.5-flash',
+        'models/gemini-pro'
+    ]
+
+    selected_model_name = None
+    for priority in priority_models:
+        if priority in available_models:
+            selected_model_name = priority
+            break
     
-    print(f"Using model: {model_name}")
+    # Fallback if exact match not found (or list failed), try the user's preference blindly or a safe default
+    if not selected_model_name:
+        print("Could not find a preferred model in the list. Attempting 'gemini-pro' as fallback.")
+        selected_model_name = 'gemini-pro'
+
+    print(f"Selected model: {selected_model_name}")
+    model = genai.GenerativeModel(selected_model_name)
 
     # 2. Read current files
     # In a real scenario, we might want to list files or be smarter, 
