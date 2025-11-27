@@ -29,9 +29,9 @@ def main():
 
     # Priority list of models to use
     priority_models = [
+        'models/gemini-3-pro-preview',
         'models/gemini-2.0-pro-exp',
         'models/gemini-2.5-pro',
-        'models/gemini-3-pro-preview',
         'models/gemini-2.0-flash',
         'models/gemini-1.5-pro-latest',
         'models/gemini-1.5-pro',
