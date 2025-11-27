@@ -16,13 +16,13 @@ def main():
 
     genai.configure(api_key=api_key)
     
-    # Try to initialize the model with fallbacks
-    model_name = 'gemini-1.5-flash'
+    # Use Gemini 1.5 Pro as requested for better performance
+    model_name = 'gemini-1.5-pro'
     try:
         model = genai.GenerativeModel(model_name)
-        # Test if model works by listing it (optional, but good for verification)
-        # or just proceed. The error usually happens at generate_content.
-    except Exception:
+    except Exception as e:
+        print(f"Error initializing {model_name}: {e}")
+        # Fallback to older pro model if the new one fails
         model_name = 'gemini-pro'
         model = genai.GenerativeModel(model_name)
     
