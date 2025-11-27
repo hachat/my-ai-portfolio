@@ -16,8 +16,17 @@ def main():
 
     genai.configure(api_key=api_key)
     
-    # Use Gemini 1.5 Flash for speed and cost
-    model = genai.GenerativeModel('gemini-1.5-flash')
+    # Try to initialize the model with fallbacks
+    model_name = 'gemini-1.5-flash'
+    try:
+        model = genai.GenerativeModel(model_name)
+        # Test if model works by listing it (optional, but good for verification)
+        # or just proceed. The error usually happens at generate_content.
+    except Exception:
+        model_name = 'gemini-pro'
+        model = genai.GenerativeModel(model_name)
+    
+    print(f"Using model: {model_name}")
 
     # 2. Read current files
     # In a real scenario, we might want to list files or be smarter, 

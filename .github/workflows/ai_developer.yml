@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   develop:
-    if: contains(github.event.issue.labels.*.name, 'ai-task') || contains(github.event.issue.title, '[AI]')
+    # Removed 'if' condition to run on all issues for this dedicated repo
+    # if: contains(github.event.issue.labels.*.name, 'ai-task') || contains(github.event.issue.title, '[AI]')
     runs-on: ubuntu-latest
     
     steps:
@@ -21,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
       - name: Install dependencies
         run: |
